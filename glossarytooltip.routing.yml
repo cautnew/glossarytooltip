@@ -1,0 +1,16 @@
+glossarytooltip.glossarylist:
+  path: '/glossary/list'
+  defaults:
+    _title: 'Glossary List'
+    _controller: '\Drupal\glossarytooltip\Controller\GlossaryTooltipController::glossaryListPage'
+  requirements:
+    _permission: 'access content'
+
+glossarytooltip.glossaryform:
+  path: '/glossary/form'
+  defaults:
+    _title: 'Glossary Form'
+    _controller: '\Drupal\glossarytooltip\Controller\GlossaryTooltipController::glossaryFormPage'
+  requirements:
+    _permission: 'access content'
+  

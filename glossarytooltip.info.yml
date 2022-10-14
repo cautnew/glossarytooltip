@@ -1,0 +1,5 @@
+name: Glossary Tooltip
+description: 'Manage your glossary list'
+package: nestlelatam
+type: module
+core_version_requirement: ^8.8.0 || ^9.0

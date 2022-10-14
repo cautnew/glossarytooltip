@@ -1,0 +1,58 @@
+<style>
+div.item-glossary {
+  border-bottom: 1px solid #000;
+}
+input.block {
+  width: 100%;
+}
+</style>
+
+<a class="button button-action button--primary" href="form">Add a new vocabulary</a>
+
+<div>
+  <label for="term-search">Search in vocabulary</label>
+  <input type="text" class="field--text block" name="term-search" id="term-search" placeholder="Search">
+</div>
+
+{% for item in items %}
+<div class="item-glossary" data-search-term="{{item.word}} {{item.definition}}">
+  <h4>{{item.word}} <small><a href="form?id={{item.pid}}">Edit</a></small></h4>
+  <p>{{item.smallerdefinition}}</p>
+</div>
+{% endfor %}
+
+<script>
+const delaySearchKeyUp = 350;
+var valSearchAtu = "";
+var inputsearch = null;
+var funcDelayAfterKeyUp = null;
+
+const updateItemsFiltered = function () {
+  jQuery(".item-glossary").each(function (ind, el) {
+    if (jQuery(el).data('search-term').includes(valSearchAtu)) {
+      jQuery(el).show();
+    } else {
+      jQuery(el).hide();
+    }
+  });
+};
+
+const onKeyUpSearch = function () {
+  const val = this.value.trim();
+
+  if (val != valSearchAtu) {
+    valSearchAtu = val;
+    ofs = 0;
+
+    clearTimeout(funcDelayAfterKeyUp);
+    funcDelayAfterKeyUp = setTimeout(() => {
+      updateItemsFiltered()
+    }, delaySearchKeyUp);
+  }
+};
+
+window.addEventListener('load', () => {
+  inputsearch = jQuery('#term-search');
+  inputsearch.on('keyup', onKeyUpSearch);
+});
+</script>

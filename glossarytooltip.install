@@ -1,0 +1,117 @@
+<?php
+
+require_once 'module_helpers.php';
+
+function getGlossaryFieldsSchema(): array
+{
+  return [
+    'pid' => [
+      'type' => 'serial',
+      'not null' => true,
+      'description' => 'Primary key'
+    ],
+    'word' => [
+      'type' => 'varchar',
+      'length' => 50,
+      'not null' => true,
+      'description' => 'Word to be described'
+    ],
+    'definition' => [
+      'type' => 'text',
+      'not null' => true,
+      'description' => 'Definition of the word'
+    ],
+    'dt_creation' => [
+      'type' => 'varchar',
+      'mysql_type' => 'datetime',
+      'not null' => true,
+      'description' => 'Creation timestamp'
+    ],
+    'dt_update' => [
+      'type' => 'varchar',
+      'mysql_type' => 'datetime',
+      'not null' => false,
+      'default' => null,
+      'description' => 'Update timestamp'
+    ]
+  ];
+}
+
+/**
+ * Implement hook_schema()
+ */
+function glossarytooltip_schema(): array
+{
+  return [
+    TABLEPRINCNAME => [
+      'description' => 'All vocabulary',
+      'fields' => getGlossaryFieldsSchema(),
+      'primary key' => ['pid'],
+      'indexes' => [
+        'words' => ['word'],
+        'definitions' => ['definition']
+      ]
+    ]
+  ];
+}
+
+/**
+ * Implement hook_install()
+ */
+function glossarytooltip_install(): void
+{
+  $timestamp = (new Datetime('now'))->format(MYSQL_DATETIMEFORMAT);
+  $values = [
+    [
+      'word' => 'Div',
+      'definition' => 'A block level container (or division of the web page) for content with no semantic meaning.',
+      'dt_creation' => $timestamp
+    ],
+    [
+      'word' => 'Head',
+      'definition' => 'Tag that surrounds important content that is invisible to the user, but is important to the browser. Elements within this tag contain metadata about the page and links to stylesheets, scripts, etc.',
+      'dt_creation' => $timestamp
+    ],
+    [
+      'word' => 'Hyperlinks',
+      'definition' => 'Hyperlinks (or just links) take the user to another webpage when they click on it. The most common attribute used with links is href, which tells the browser where the link goes.',
+      'dt_creation' => $timestamp
+    ],
+    [
+      'word' => 'Line breaks',
+      'definition' => 'This tag is used in a block of text to force a line break. This is to be used for things which are a single paragraph, but where this formatting is necessary such as poems or addresses. To separate paragraphs, separate each paragraph into a separate element instead.',
+      'dt_creation' => $timestamp
+    ],
+    [
+      'word' => 'Ordered Lists',
+      'definition' => 'Ordered lists items are denoted with numbers.',
+      'dt_creation' => $timestamp
+    ],
+    [
+      'word' => 'Paragraphs',
+      'definition' => 'One of the most common tags in HTML - it denotes a paragraph of text. It often has other elements nested inside of it, such as &lt;img/&gt;, &lt;a&gt;, &lt;strong&gt; and &lt;em&gt;.',
+      'dt_creation' => $timestamp
+    ],
+    [
+      'word' => 'Tables',
+      'definition' => 'An element for displaying information in rows and columns. Supports headers and footers for labeling columns. Divides information into rows (denoted by the tr tag) which contain cells (denoted by the td tag).',
+      'dt_creation' => $timestamp
+    ],
+    [
+      'word' => 'Title',
+      'definition' => 'This tag tells the browser what to display as the page title at the top and tells search engines what the title of your site is. It goes inside <head> tags. Try and make your page titles descriptive, but not overly verbose.',
+      'dt_creation' => $timestamp
+    ]
+  ];
+  /* Source: https://www.codecademy.com/article/glossary-html (accessed in 2022-10-13) */
+
+  $fields = array_keys($values[0]);
+  $db = \Drupal::database();
+  $query = $db->insert(TABLEPRINCNAME)->fields($fields);
+
+  foreach ($values as $value) {
+    $query->values($value);
+  }
+
+  $query->execute();
+}
