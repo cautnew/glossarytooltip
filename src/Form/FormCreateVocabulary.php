@@ -26,7 +26,7 @@ class FormCreateVocabulary extends FormBase {
    */
   public function buildForm(array $form, FormStateInterface $form_state)
   {
-    $id = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT) ?? 0;
+    $id = filter_input(INPUT_POST, 'pid', FILTER_SANITIZE_NUMBER_INT) ?? filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT) ?? 0;
     $word = '';
     $definition = '';
 
@@ -53,6 +53,7 @@ class FormCreateVocabulary extends FormBase {
       '#type' => 'textfield',
       '#attributes' => [
         'placeholder' => $this->t('Word'),
+        'maxlength' => 50
       ],
       '#required' => TRUE,
       '#value' => $word
