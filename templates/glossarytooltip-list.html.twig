@@ -27,14 +27,18 @@ var valSearchAtu = "";
 var inputsearch = null;
 var funcDelayAfterKeyUp = null;
 
+const forEachItemGlossary = function (el) {
+  const searhTerm = el.getAttribute('data-search-term').toUpperCase();
+  if (searhTerm.includes(valSearchAtu.toUpperCase())) {
+    el.style.display = 'block';
+  } else {
+    el.style.display = 'none';
+  }
+};
+
 const updateItemsFiltered = function () {
-  jQuery(".item-glossary").each(function (ind, el) {
-    if (jQuery(el).data('search-term').includes(valSearchAtu)) {
-      jQuery(el).show();
-    } else {
-      jQuery(el).hide();
-    }
-  });
+  const items = document.querySelectorAll(".item-glossary");
+  items.forEach(forEachItemGlossary);
 };
 
 const onKeyUpSearch = function () {
@@ -51,8 +55,5 @@ const onKeyUpSearch = function () {
   }
 };
 
-window.addEventListener('load', () => {
-  inputsearch = jQuery('#term-search');
-  inputsearch.on('keyup', onKeyUpSearch);
-});
+document.querySelector('#term-search').addEventListener('keyup', onKeyUpSearch);
 </script>
