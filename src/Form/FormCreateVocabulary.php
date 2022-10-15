@@ -26,7 +26,7 @@ class FormCreateVocabulary extends FormBase {
    */
   public function buildForm(array $form, FormStateInterface $form_state)
   {
-    $id = (int) ($_GET['id'] ?? 0);
+    $id = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT) ?? 0;
     $word = '';
     $definition = '';
 
@@ -158,6 +158,10 @@ class FormCreateVocabulary extends FormBase {
     if (!empty($idform)) {
       if ($id == $idform) {
         $this->updateVocabulary($id, $word, $definition);
+        return $this->messenger()->addStatus($this->t(
+          'The word @word has been updated',
+          ['@word' => $word]
+        ));
       }
     }
 
