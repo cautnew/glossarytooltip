@@ -17,7 +17,7 @@ class GlossaryTooltipController extends ControllerBase
 
   public function glossaryFormPage(): array
   {
-    $form = \Drupal::formBuilder()->getForm('\Drupal\glossarytooltip\Form\FormCreateVocabulary');
+    $form = Drupal::formBuilder()->getForm('\Drupal\glossarytooltip\Form\FormCreateVocabulary');
 
     return [
       '#theme' => 'glossarytooltip-form',
